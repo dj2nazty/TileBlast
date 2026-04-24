@@ -36,8 +36,6 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
     private val _events = MutableSharedFlow<GameEvent>(extraBufferCapacity = 8)
     val events = _events.asSharedFlow()
 
-    private var clearsSinceInterstitial = 0
-
     init {
         viewModelScope.launch {
             delay(1500)
@@ -58,7 +56,7 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun newGame() {
-        clearsSinceInterstitial = 0
+        val played = _state.value.score > 0
         _state.update {
             GameState(
                 grid = emptyGrid().toImmutable(),
@@ -66,6 +64,9 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
                 used = listOf(false, false, false),
                 best = it.best,
             )
+        }
+        if (played) {
+            viewModelScope.launch { _events.emit(GameEvent.RequestInterstitial) }
         }
     }
 
@@ -195,18 +196,6 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             delay(360)
             _state.update { it.copy(justPlaced = emptySet(), flashing = emptySet()) }
-        }
-
-        // Interstitial counter
-        if (cleared > 0) {
-            clearsSinceInterstitial += cleared
-            if (clearsSinceInterstitial >= GameConstants.INT_EVERY) {
-                clearsSinceInterstitial = 0
-                viewModelScope.launch {
-                    delay(400)
-                    _events.emit(GameEvent.RequestInterstitial)
-                }
-            }
         }
 
         // Check for game over

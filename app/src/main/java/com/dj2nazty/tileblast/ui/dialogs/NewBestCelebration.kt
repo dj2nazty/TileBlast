@@ -81,6 +81,14 @@ fun NewBestCelebrationDialog(
                 verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Text(
+                    text = "GAME OVER",
+                    fontSize = 22.sp,
+                    color = Color(0xFFE8E8F8).copy(alpha = 0.75f),
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 3.sp,
+                )
+
                 AnimatedBigText(
                     lines = listOf("NEW", "BEST SCORE!"),
                 )

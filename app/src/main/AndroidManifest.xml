@@ -14,10 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TileBlast">
 
-        <!-- AdMob App ID. Test ID for now — replace with your real ID from AdMob Console. -->
+        <!-- AdMob App ID (real). Ad Unit IDs in ads/AdIds.kt are still test IDs
+             until the three real units are created in AdMob Console. -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-4183870506667640~4934290763" />
 
         <activity
             android:name=".MainActivity"

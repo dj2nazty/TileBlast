@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -197,15 +198,19 @@ fun GameScreen(vm: GameViewModel = viewModel()) {
                 xpPerLevel = GameConstants.LEVEL_XP,
                 xpTarget = state.xpTarget,
             )
-            Box(
+            BoxWithConstraints(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
+                // Largest square that fits in the available box (keeps the grid
+                // from overflowing vertically when the banner ad + tray + level
+                // bar eat into the column's height).
+                val side = if (maxWidth < maxHeight) maxWidth else maxHeight
                 GameGrid(
                     state = state,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.size(side),
                     onPositioned = { x, y, s ->
                         gridOffsetRoot = Offset(x, y)
                         gridSizePx = s

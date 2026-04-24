@@ -48,8 +48,6 @@ import kotlin.math.sin
 @Composable
 fun NewBestCelebrationDialog(
     score: Int,
-    lives: Int,
-    onContinue: () -> Unit,
     onPlayAgain: () -> Unit,
 ) {
     Dialog(
@@ -99,9 +97,6 @@ fun NewBestCelebrationDialog(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                if (lives > 0) {
-                    ContinueButton(onClick = onContinue)
-                }
                 PlayAgainButton(onClick = onPlayAgain)
             }
         }
@@ -357,39 +352,6 @@ private fun PlayAgainButton(onClick: () -> Unit) {
             fontWeight = FontWeight.ExtraBold,
             letterSpacing = 1.sp,
         )
-    }
-}
-
-@Composable
-private fun ContinueButton(onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(min = 52.dp)
-            .clip(RoundedCornerShape(14.dp))
-            .background(
-                Brush.verticalGradient(
-                    0f to Color(0xFF5B8FFF),
-                    1f to Color(0xFF2E5EDC),
-                ),
-            )
-            .border(1.5.dp, Color(0xFF8FB4FF), RoundedCornerShape(14.dp))
-            .clickable { onClick() }
-            .padding(vertical = 14.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Text(
-                text = "\u25B6  WATCH AD — CONTINUE",
-                color = Color.White,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = 0.5.sp,
-            )
-        }
     }
 }
 

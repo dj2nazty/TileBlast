@@ -126,9 +126,6 @@ private fun AdBadge(label: String = "Rewarded Video Ad") {
 @Composable
 fun GameOverDialog(
     score: Int,
-    isNewBest: Boolean,
-    lives: Int,
-    onContinue: () -> Unit,
     onNewGame: () -> Unit,
 ) {
     ModalOverlay {
@@ -140,43 +137,7 @@ fun GameOverDialog(
                 color = Accent,
                 fontWeight = FontWeight.ExtraBold,
             )
-            if (isNewBest) {
-                Text(
-                    text = "\u2605 New Best!",
-                    color = Accent,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(Accent.copy(alpha = 0.15f))
-                        .padding(horizontal = 16.dp, vertical = 5.dp),
-                )
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                repeat(3) { i ->
-                    Box(
-                        modifier = Modifier
-                            .size(14.dp)
-                            .clip(CircleShape)
-                            .background(if (i < lives) Red else Surf2)
-                            .border(1.dp, BorderC, CircleShape),
-                    )
-                }
-            }
-            Text(
-                text = if (lives > 0)
-                    "$lives continue${if (lives > 1) "s" else ""} remaining"
-                else "No continues left",
-                color = Muted,
-                fontSize = 13.sp,
-            )
-            AdBadge()
-            PrimaryButton(
-                label = "\u25B6  Watch Ad — Continue",
-                enabled = lives > 0,
-                onClick = onContinue,
-            )
-            GhostButton(label = "New Game", onClick = onNewGame)
+            PrimaryButton(label = "Start New Game", onClick = onNewGame)
         }
     }
 }

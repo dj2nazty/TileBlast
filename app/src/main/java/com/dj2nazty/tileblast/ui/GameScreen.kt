@@ -292,33 +292,25 @@ fun GameScreen(vm: GameViewModel = viewModel()) {
     // Dialogs
     if (state.showGameOver) {
         val isNewBest = state.score >= state.best && state.score > 0
-        val continueHandler: () -> Unit = {
-            if (activity != null) {
-                AdManager.showRewarded(
-                    activity = activity,
-                    onReward = { vm.grantContinue() },
-                )
-            } else {
-                vm.grantContinue()
-            }
-        }
         val playAgainHandler: () -> Unit = {
-            vm.dismissGameOver()
-            vm.newGame()
+            val startFresh = {
+                vm.dismissGameOver()
+                vm.newGame()
+            }
+            if (activity != null) {
+                AdManager.showInterstitial(activity) { startFresh() }
+            } else {
+                startFresh()
+            }
         }
         if (isNewBest) {
             NewBestCelebrationDialog(
                 score = state.score,
-                lives = state.lives,
-                onContinue = continueHandler,
                 onPlayAgain = playAgainHandler,
             )
         } else {
             GameOverDialog(
                 score = state.score,
-                isNewBest = false,
-                lives = state.lives,
-                onContinue = continueHandler,
                 onNewGame = playAgainHandler,
             )
         }

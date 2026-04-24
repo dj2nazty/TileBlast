@@ -56,7 +56,6 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun newGame() {
-        val played = _state.value.score > 0
         _state.update {
             GameState(
                 grid = emptyGrid().toImmutable(),
@@ -64,9 +63,6 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
                 used = listOf(false, false, false),
                 best = it.best,
             )
-        }
-        if (played) {
-            viewModelScope.launch { _events.emit(GameEvent.RequestInterstitial) }
         }
     }
 

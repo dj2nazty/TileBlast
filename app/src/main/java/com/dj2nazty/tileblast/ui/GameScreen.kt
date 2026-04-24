@@ -291,25 +291,37 @@ fun GameScreen(vm: GameViewModel = viewModel()) {
 
     // Dialogs
     if (state.showGameOver) {
-        GameOverDialog(
-            score = state.score,
-            isNewBest = state.score >= state.best && state.score > 0,
-            lives = state.lives,
-            onContinue = {
-                if (activity != null) {
-                    AdManager.showRewarded(
-                        activity = activity,
-                        onReward = { vm.grantContinue() },
-                    )
-                } else {
-                    vm.grantContinue()
-                }
-            },
-            onNewGame = {
-                vm.dismissGameOver()
-                vm.newGame()
-            },
-        )
+        val isNewBest = state.score >= state.best && state.score > 0
+        val continueHandler: () -> Unit = {
+            if (activity != null) {
+                AdManager.showRewarded(
+                    activity = activity,
+                    onReward = { vm.grantContinue() },
+                )
+            } else {
+                vm.grantContinue()
+            }
+        }
+        val playAgainHandler: () -> Unit = {
+            vm.dismissGameOver()
+            vm.newGame()
+        }
+        if (isNewBest) {
+            NewBestCelebrationDialog(
+                score = state.score,
+                lives = state.lives,
+                onContinue = continueHandler,
+                onPlayAgain = playAgainHandler,
+            )
+        } else {
+            GameOverDialog(
+                score = state.score,
+                isNewBest = false,
+                lives = state.lives,
+                onContinue = continueHandler,
+                onNewGame = playAgainHandler,
+            )
+        }
     }
     if (state.showDaily) {
         DailyRewardDialog(

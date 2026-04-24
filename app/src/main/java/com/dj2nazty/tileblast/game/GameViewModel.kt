@@ -149,11 +149,13 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
         }
         toFlash.forEach { (r, c) -> grid[r][c] = null }
 
+        // Combo multiplier: clearing 1 line = 1×, 2 lines = 2×, 3 = 3×, 4 = 4× ...
+        // So clearing a row + column simultaneously isn't just additive — it doubles
+        // the base cells-cleared points. Higher-order strikes scale dramatically.
         val cleared = clearedRows + clearedCols
         val cells = toFlash.size
-        val pts = if (cleared > 0) {
-            cells * 10 + if (cleared > 1) (cleared - 1) * 50 else 0
-        } else 0
+        val multiplier = if (cleared > 0) cleared else 1
+        val pts = if (cleared > 0) cells * 10 * multiplier else 0
 
         val newUsed = s.used.toMutableList()
         newUsed[idx] = true
@@ -189,7 +191,15 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
         // Fire transient events
         viewModelScope.launch {
             if (pts > 0) _events.emit(GameEvent.ScorePop(pts))
-            if (cleared >= 2) _events.emit(GameEvent.Combo("COMBO ×$cleared!"))
+            if (cleared >= 2) {
+                val label = when (cleared) {
+                    2 -> "\u00D72 STRIKE!"
+                    3 -> "\u00D73 TRIPLE!"
+                    4 -> "\u00D74 QUAD!"
+                    else -> "\u00D7$cleared MEGA!"
+                }
+                _events.emit(GameEvent.Combo(label))
+            }
         }
 
         // Clear just-placed / flashing after animation window

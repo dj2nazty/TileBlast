@@ -64,7 +64,7 @@ fun GameGrid(
                 colors = colorMap,
             )
             bursts += instance
-            delay(700)
+            delay(1500)
             bursts.remove(instance)
         }
     }
@@ -217,7 +217,7 @@ private fun BurstOverlay(
 ) {
     val progress = remember { Animatable(0f) }
     LaunchedEffect(burst.id) {
-        progress.animateTo(1f, tween(850))
+        progress.animateTo(1f, tween(1400))
     }
     // Pre-compute per-cell randomized ray/sparkle layouts so each burst looks organic.
     val rays = remember(burst.id) {

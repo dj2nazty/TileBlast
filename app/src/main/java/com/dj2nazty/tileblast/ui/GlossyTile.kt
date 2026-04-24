@@ -6,13 +6,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 
 /**
- * Premium glossy tile with pronounced bevel, top highlight strip, and corner sparkles.
+ * Premium glossy tile with a soft top-sheen and bevel.
  * Shared between the board, tray preview, and the floating dragged piece.
  */
 @Composable
@@ -26,107 +27,84 @@ fun GlossyTile(color: Color, modifier: Modifier = Modifier) {
 }
 
 /**
- * Paint a glossy 3D-beveled tile filling the DrawScope.
- *
- * Stacking order (bottom → top):
- *   1. Outer drop-shadow pad (very subtle black)
- *   2. Dark rim behind the tile (fake bottom bevel edge)
- *   3. Base color fill
- *   4. Vertical dual-gradient: bright top half → base mid → dark bottom
- *   5. Top bevel highlight strip (the bright "plastic keycap" ridge)
- *   6. Bottom inner shadow
- *   7. Thin inner stroke (slightly darker than the base) to crisp the edge
- *   8. Corner sparkle dots
+ * Paint a glossy 3D-beveled tile filling the DrawScope. Pure gradient-based
+ * rendering — no pasted-on "sparkle dot" artifacts. The illusion of depth
+ * comes from:
+ *   1. A bottom-offset dark silhouette (ground shadow / side thickness)
+ *   2. Base vertical gradient (light top → base → dark bottom)
+ *   3. A soft ambient radial highlight in the upper half (reflected light)
+ *   4. A crisp top-edge bevel (very thin bright line across the top)
+ *   5. A subtle bottom inner shadow for contact weight
+ *   6. Darker inner stroke to define the silhouette
  */
 fun DrawScope.drawGlossyTile(base: Color, radius: CornerRadius) {
     val w = size.width
     val h = size.height
 
-    val bright = base.lighten(0.55f)
-    val mid = base.lighten(0.12f)
-    val darker = base.darken(0.40f)
-    val darkest = base.darken(0.62f)
+    val topLight = base.lighten(0.45f)
+    val topMid   = base.lighten(0.15f)
+    val bottomDark = base.darken(0.35f)
+    val bottomDarker = base.darken(0.55f)
 
-    // 1. Soft drop-shadow suggestion (bottom dark edge) — rendered as a slightly
-    //    offset darker round-rect so the tile reads as floating above the grid.
+    // 1. Silhouette/drop suggestion — offset darker tile so the bottom edge
+    //    reads as the side of the plastic tile peeking out.
     drawRoundRect(
-        color = darkest.copy(alpha = 0.85f),
-        topLeft = Offset(0f, h * 0.03f),
-        size = androidx.compose.ui.geometry.Size(w, h),
+        color = bottomDarker,
+        topLeft = Offset(0f, h * 0.04f),
+        size = Size(w, h),
         cornerRadius = radius,
     )
 
-    // 2. Base body
+    // 2. Main body: smooth vertical gradient (brighter top → base → darker)
     drawRoundRect(
         brush = Brush.verticalGradient(
-            0f to bright,
-            0.30f to mid,
-            0.68f to base,
-            1f to darker,
+            0f to topLight,
+            0.40f to topMid,
+            0.70f to base,
+            1f to bottomDark,
         ),
         cornerRadius = radius,
     )
 
-    // 3. Top glossy highlight band — bright white arc that fades down
+    // 3. Ambient top-sheen (soft radial highlight from upper-center). This is
+    //    what sells the "glossy plastic" look without any fake sparkle dots.
+    drawRoundRect(
+        brush = Brush.radialGradient(
+            0f to Color.White.copy(alpha = 0.30f),
+            0.6f to Color.White.copy(alpha = 0.06f),
+            1f to Color.Transparent,
+            center = Offset(w * 0.5f, h * 0.05f),
+            radius = w * 0.9f,
+        ),
+        cornerRadius = radius,
+    )
+
+    // 4. Crisp top-edge bevel line
     drawRoundRect(
         brush = Brush.verticalGradient(
             0f to Color.White.copy(alpha = 0.55f),
-            0.35f to Color.White.copy(alpha = 0.12f),
-            0.55f to Color.Transparent,
+            0.35f to Color.Transparent,
         ),
-        cornerRadius = radius,
+        topLeft = Offset(w * 0.08f, h * 0.04f),
+        size = Size(w * 0.84f, h * 0.18f),
+        cornerRadius = CornerRadius(radius.x * 0.7f),
     )
 
-    // 4. Bottom inner darkening for extra body
+    // 5. Bottom inner shadow for weight
     drawRoundRect(
         brush = Brush.verticalGradient(
             0f to Color.Transparent,
-            0.70f to Color.Transparent,
-            1f to Color.Black.copy(alpha = 0.32f),
+            0.72f to Color.Transparent,
+            1f to Color.Black.copy(alpha = 0.28f),
         ),
         cornerRadius = radius,
     )
 
-    // 5. Crisp inner stroke so the tile edges read clean on dark bg
+    // 6. Thin inner stroke so the silhouette reads clean on dark bg
     drawRoundRect(
-        color = darker.copy(alpha = 0.9f),
+        color = bottomDark.copy(alpha = 0.85f),
         cornerRadius = radius,
-        style = Stroke(width = w * 0.025f),
-    )
-
-    // 6. Top rim highlight (very thin, just below the top edge)
-    val rimInset = w * 0.10f
-    drawRoundRect(
-        brush = Brush.verticalGradient(
-            0f to Color.White.copy(alpha = 0.65f),
-            0.35f to Color.Transparent,
-            startY = h * 0.04f,
-            endY = h * 0.28f,
-        ),
-        topLeft = Offset(rimInset, h * 0.08f),
-        size = androidx.compose.ui.geometry.Size(w - rimInset * 2f, h * 0.26f),
-        cornerRadius = CornerRadius(radius.x * 0.6f),
-    )
-
-    // 7. Corner star-sparkle (two overlapping circles for a glowing dot)
-    val sparkleX = w * 0.28f
-    val sparkleY = h * 0.22f
-    drawCircle(
-        color = Color.White.copy(alpha = 0.45f),
-        radius = w * 0.13f,
-        center = Offset(sparkleX, sparkleY),
-    )
-    drawCircle(
-        color = Color.White,
-        radius = w * 0.055f,
-        center = Offset(sparkleX, sparkleY),
-    )
-
-    // 8. Tiny secondary sparkle lower right
-    drawCircle(
-        color = Color.White.copy(alpha = 0.75f),
-        radius = w * 0.035f,
-        center = Offset(w * 0.75f, h * 0.62f),
+        style = Stroke(width = w * 0.02f),
     )
 }
 

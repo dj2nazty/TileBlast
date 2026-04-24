@@ -82,7 +82,7 @@ fun GameScreen(vm: GameViewModel = viewModel()) {
                 is GameEvent.Combo -> {
                     comboText = event.message
                     coroutineScope.launch {
-                        delay(900)
+                        delay(1600)
                         comboText = null
                     }
                 }
@@ -97,7 +97,7 @@ fun GameScreen(vm: GameViewModel = viewModel()) {
                     val pop = ScorePopVisual(System.nanoTime(), event.points)
                     scorePops += pop
                     coroutineScope.launch {
-                        delay(800)
+                        delay(2000)
                         scorePops.remove(pop)
                     }
                 }
@@ -374,16 +374,23 @@ private fun FloatingDragPiece(
 @Composable
 private fun ScorePop(points: Int, key: Long, modifier: Modifier = Modifier) {
     val offsetY = remember { Animatable(0f) }
-    val alpha = remember { Animatable(1f) }
-    val scale = remember { Animatable(0.6f) }
+    val alpha = remember { Animatable(0f) }
+    val scale = remember { Animatable(0.5f) }
     LaunchedEffect(key) {
-        launch { offsetY.animateTo(-60f, tween(900)) }
-        launch { scale.animateTo(1.15f, tween(180)) }
+        // Pop in fast (scale + fade in), hold big for most of the duration,
+        // then drift up + fade out so the points stay readable through the burst.
         launch {
-            kotlinx.coroutines.delay(180)
+            alpha.animateTo(1f, tween(140))
+            kotlinx.coroutines.delay(1200)
+            alpha.animateTo(0f, tween(550))
+        }
+        launch {
+            scale.animateTo(1.25f, tween(180))
             scale.animateTo(1f, tween(180))
         }
-        alpha.animateTo(0f, tween(900))
+        // Hold near origin, then drift up in the last third
+        offsetY.animateTo(-20f, tween(900))
+        offsetY.animateTo(-90f, tween(900))
     }
     androidx.compose.foundation.layout.Box(
         modifier = modifier
@@ -395,17 +402,17 @@ private fun ScorePop(points: Int, key: Long, modifier: Modifier = Modifier) {
                 scaleY = scale.value
             },
     ) {
-        // Dark outline for punchy legibility on any background
+        // Drop shadow
         Text(
             text = "+%,d".format(points),
-            fontSize = 28.sp,
-            color = Color.Black.copy(alpha = 0.55f),
+            fontSize = 32.sp,
+            color = Color.Black.copy(alpha = 0.65f),
             fontWeight = FontWeight.ExtraBold,
-            modifier = Modifier.graphicsLayer { translationX = 1.5f; translationY = 1.5f },
+            modifier = Modifier.graphicsLayer { translationX = 2f; translationY = 2f },
         )
         Text(
             text = "+%,d".format(points),
-            fontSize = 28.sp,
+            fontSize = 32.sp,
             color = Color(0xFFFFE45C),
             fontWeight = FontWeight.ExtraBold,
         )
@@ -422,8 +429,8 @@ private fun ComboBanner(text: String, modifier: Modifier = Modifier) {
             scale.animateTo(1f, tween(160))
         }
         alpha.animateTo(1f, tween(140))
-        kotlinx.coroutines.delay(520)
-        alpha.animateTo(0f, tween(280))
+        kotlinx.coroutines.delay(1100)
+        alpha.animateTo(0f, tween(350))
     }
     androidx.compose.foundation.layout.Box(
         modifier = modifier

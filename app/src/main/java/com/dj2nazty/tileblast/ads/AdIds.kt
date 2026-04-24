@@ -10,5 +10,5 @@ package com.dj2nazty.tileblast.ads
 object AdIds {
     const val BANNER = "ca-app-pub-4183870506667640/9033317879"
     const val INTERSTITIAL = "ca-app-pub-4183870506667640/8841746187"
-    const val REWARDED = "ca-app-pub-3940256099942544/5224354917"
+    const val REWARDED = "ca-app-pub-4183870506667640/4171873430"
 }

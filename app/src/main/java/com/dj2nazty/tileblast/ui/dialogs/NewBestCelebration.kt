@@ -343,7 +343,7 @@ private fun PlayAgainButton(onClick: () -> Unit) {
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = "PLAY AGAIN",
+            text = "START NEW GAME",
             color = Color.White,
             fontSize = 20.sp,
             fontWeight = FontWeight.ExtraBold,

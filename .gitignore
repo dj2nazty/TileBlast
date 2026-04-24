@@ -1,0 +1,37 @@
+# Gradle
+.gradle/
+build/
+**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.DS_Store
+captures/
+local.properties
+
+# Android
+/app/build/
+/app/release/
+bin/
+gen/
+out/
+*.apk
+*.aar
+*.ap_
+*.aab
+*.dex
+*.class
+proguard/
+
+# Logs & keys
+*.log
+keystore.properties
+*.jks
+*.keystore
+
+# Kotlin
+.kotlin/

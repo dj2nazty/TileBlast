@@ -13,13 +13,15 @@ object GameConstants {
     const val KEY_DAILY = "tb_daily"
 }
 
+// Vibrant palette matching the Tile Blast art style (pink/lime/cyan/orange/blue/purple/yellow).
 val PieceColors = listOf(
-    Color(0xFF22D9A0),
-    Color(0xFF4FA8F5),
-    Color(0xFFF06060),
-    Color(0xFF9B80F0),
-    Color(0xFFF0A030),
-    Color(0xFF50D0E0),
+    Color(0xFFFF4FA8), // hot pink / magenta
+    Color(0xFF7FE034), // lime green
+    Color(0xFF34D4F0), // cyan
+    Color(0xFFFF9E2C), // orange
+    Color(0xFF3A7FFF), // blue
+    Color(0xFFB54FFF), // purple
+    Color(0xFFFFD12E), // yellow
 )
 
 // All 23 shapes from the original HTML — 1 = filled, 0 = empty.

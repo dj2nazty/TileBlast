@@ -143,7 +143,13 @@ fun GameScreen(vm: GameViewModel = viewModel()) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Bg)
+            .background(
+                brush = androidx.compose.ui.graphics.Brush.radialGradient(
+                    0f to Color(0xFF1F1F3A),
+                    0.55f to Color(0xFF15152A),
+                    1f to Color(0xFF0A0A14),
+                ),
+            )
             .pointerInput(state.used) {
                 awaitEachGesture {
                     val down = awaitFirstDown(
@@ -249,18 +255,11 @@ fun GameScreen(vm: GameViewModel = viewModel()) {
             )
         }
 
-        // Combo banner
-        AnimatedVisibility(
-            visible = comboText != null,
-            enter = fadeIn(tween(150)),
-            exit = fadeOut(tween(250)),
-            modifier = Modifier.align(Alignment.Center),
-        ) {
-            Text(
-                text = comboText.orEmpty(),
-                fontSize = 34.sp,
-                color = Accent,
-                fontWeight = FontWeight.ExtraBold,
+        // Combo banner — bigger, glowing, scales in/out
+        if (comboText != null) {
+            ComboBanner(
+                text = comboText!!,
+                modifier = Modifier.align(Alignment.Center),
             )
         }
 
@@ -351,21 +350,21 @@ private fun FloatingDragPiece(
     Column(
         modifier = Modifier
             .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
-            .graphicsLayer {
-                shadowElevation = 24f
-            },
+            .graphicsLayer { shadowElevation = 24f },
         verticalArrangement = Arrangement.spacedBy(gapDp),
     ) {
         for (r in piece.shape.indices) {
             Row(horizontalArrangement = Arrangement.spacedBy(gapDp)) {
                 for (c in 0 until piece.cols) {
                     val on = c < piece.shape[r].size && piece.shape[r][c] == 1
-                    Box(
-                        modifier = Modifier
-                            .size(cellDp)
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(if (on) piece.color else Color.Transparent),
-                    )
+                    if (on) {
+                        GlossyTile(
+                            color = piece.color,
+                            modifier = Modifier.size(cellDp),
+                        )
+                    } else {
+                        Box(modifier = Modifier.size(cellDp))
+                    }
                 }
             }
         }
@@ -376,22 +375,80 @@ private fun FloatingDragPiece(
 private fun ScorePop(points: Int, key: Long, modifier: Modifier = Modifier) {
     val offsetY = remember { Animatable(0f) }
     val alpha = remember { Animatable(1f) }
+    val scale = remember { Animatable(0.6f) }
     LaunchedEffect(key) {
-        launch { offsetY.animateTo(-40f, tween(750)) }
-        alpha.animateTo(0f, tween(750))
+        launch { offsetY.animateTo(-60f, tween(900)) }
+        launch { scale.animateTo(1.15f, tween(180)) }
+        launch {
+            kotlinx.coroutines.delay(180)
+            scale.animateTo(1f, tween(180))
+        }
+        alpha.animateTo(0f, tween(900))
     }
-    Text(
-        text = "+%,d".format(points),
-        fontSize = 20.sp,
-        color = Accent,
-        fontWeight = FontWeight.ExtraBold,
+    androidx.compose.foundation.layout.Box(
         modifier = modifier
             .padding(top = 80.dp)
             .graphicsLayer {
                 translationY = offsetY.value
                 this.alpha = alpha.value
+                scaleX = scale.value
+                scaleY = scale.value
             },
-    )
+    ) {
+        // Dark outline for punchy legibility on any background
+        Text(
+            text = "+%,d".format(points),
+            fontSize = 28.sp,
+            color = Color.Black.copy(alpha = 0.55f),
+            fontWeight = FontWeight.ExtraBold,
+            modifier = Modifier.graphicsLayer { translationX = 1.5f; translationY = 1.5f },
+        )
+        Text(
+            text = "+%,d".format(points),
+            fontSize = 28.sp,
+            color = Color(0xFFFFE45C),
+            fontWeight = FontWeight.ExtraBold,
+        )
+    }
+}
+
+@Composable
+private fun ComboBanner(text: String, modifier: Modifier = Modifier) {
+    val scale = remember { Animatable(0.3f) }
+    val alpha = remember { Animatable(0f) }
+    LaunchedEffect(text) {
+        launch {
+            scale.animateTo(1.25f, tween(180))
+            scale.animateTo(1f, tween(160))
+        }
+        alpha.animateTo(1f, tween(140))
+        kotlinx.coroutines.delay(520)
+        alpha.animateTo(0f, tween(280))
+    }
+    androidx.compose.foundation.layout.Box(
+        modifier = modifier
+            .graphicsLayer {
+                scaleX = scale.value
+                scaleY = scale.value
+                this.alpha = alpha.value
+            },
+    ) {
+        // Black shadow behind
+        Text(
+            text = text,
+            fontSize = 44.sp,
+            color = Color.Black.copy(alpha = 0.65f),
+            fontWeight = FontWeight.ExtraBold,
+            modifier = Modifier.graphicsLayer { translationX = 3f; translationY = 3f },
+        )
+        // Bright front
+        Text(
+            text = text,
+            fontSize = 44.sp,
+            color = Color(0xFFFFE45C),
+            fontWeight = FontWeight.ExtraBold,
+        )
+    }
 }
 
 // Extension on VM so UI doesn't touch internal state math.

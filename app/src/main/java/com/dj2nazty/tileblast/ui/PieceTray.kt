@@ -134,20 +134,22 @@ private fun PiecePreview(piece: Piece, maxCellDp: Int) {
     val cols = piece.cols
     val rows = piece.rows
     val maxDim = maxOf(cols, rows)
-    // 82 is the approximate preview budget from the HTML
     val cellPx = (82 / maxDim).coerceAtMost(maxCellDp)
     Column {
         for (r in piece.shape.indices) {
             Row {
                 for (c in 0 until cols) {
                     val on = c < piece.shape[r].size && piece.shape[r][c] == 1
-                    Box(
-                        modifier = Modifier
-                            .size(cellPx.dp)
-                            .padding(1.dp)
-                            .clip(RoundedCornerShape(2.dp))
-                            .background(if (on) piece.color else Color.Transparent)
-                    )
+                    if (on) {
+                        GlossyTile(
+                            color = piece.color,
+                            modifier = Modifier
+                                .size(cellPx.dp)
+                                .padding(1.dp),
+                        )
+                    } else {
+                        Box(modifier = Modifier.size(cellPx.dp))
+                    }
                 }
             }
         }

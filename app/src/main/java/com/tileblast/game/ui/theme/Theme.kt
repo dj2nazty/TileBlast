@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast.ui.theme
+package com.tileblast.game.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme

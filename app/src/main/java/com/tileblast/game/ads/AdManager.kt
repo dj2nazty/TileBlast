@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast.ads
+package com.tileblast.game.ads
 
 import android.app.Activity
 import android.content.Context

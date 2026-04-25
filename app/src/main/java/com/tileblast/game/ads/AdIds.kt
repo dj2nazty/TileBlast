@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast.ads
+package com.tileblast.game.ads
 
 /**
  * Ad Unit IDs. These are Google's official TEST ids — safe to use in development.

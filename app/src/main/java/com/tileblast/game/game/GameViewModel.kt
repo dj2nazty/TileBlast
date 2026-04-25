@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast.game
+package com.tileblast.game.game
 
 import android.app.Application
 import android.content.Context

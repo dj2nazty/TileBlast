@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast.ui
+package com.tileblast.game.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,8 +18,8 @@ import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.dj2nazty.tileblast.game.Piece
-import com.dj2nazty.tileblast.ui.theme.*
+import com.tileblast.game.game.Piece
+import com.tileblast.game.ui.theme.*
 
 @Composable
 fun PieceTray(

@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast.ads
+package com.tileblast.game.ads
 
 import android.widget.LinearLayout
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast.ui
+package com.tileblast.game.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -35,14 +35,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import android.app.Activity
-import com.dj2nazty.tileblast.ads.AdManager
-import com.dj2nazty.tileblast.ads.BannerAdView
-import com.dj2nazty.tileblast.game.GameConstants
-import com.dj2nazty.tileblast.game.GameEvent
-import com.dj2nazty.tileblast.game.GameViewModel
-import com.dj2nazty.tileblast.game.Piece
-import com.dj2nazty.tileblast.ui.dialogs.*
-import com.dj2nazty.tileblast.ui.theme.*
+import com.tileblast.game.ads.AdManager
+import com.tileblast.game.ads.BannerAdView
+import com.tileblast.game.game.GameConstants
+import com.tileblast.game.game.GameEvent
+import com.tileblast.game.game.GameViewModel
+import com.tileblast.game.game.Piece
+import com.tileblast.game.ui.dialogs.*
+import com.tileblast.game.ui.theme.*
 import kotlin.math.roundToInt
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast.ui.dialogs
+package com.tileblast.game.ui.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.dj2nazty.tileblast.ui.theme.*
+import com.tileblast.game.ui.theme.*
 
 @Composable
 private fun Modal(content: @Composable ColumnScope.() -> Unit) {

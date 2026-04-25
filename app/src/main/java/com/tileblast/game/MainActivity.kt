@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast
+package com.tileblast.game
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,10 +13,10 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.dj2nazty.tileblast.ads.AdManager
-import com.dj2nazty.tileblast.ui.GameScreen
-import com.dj2nazty.tileblast.ui.theme.Bg
-import com.dj2nazty.tileblast.ui.theme.TileBlastTheme
+import com.tileblast.game.ads.AdManager
+import com.tileblast.game.ui.GameScreen
+import com.tileblast.game.ui.theme.Bg
+import com.tileblast.game.ui.theme.TileBlastTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -12,11 +12,11 @@ val keystoreProps = Properties().apply {
 val hasReleaseSigning = keystoreProps.getProperty("storeFile") != null
 
 android {
-    namespace = "com.dj2nazty.tileblast"
+    namespace = "com.tileblast.game"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.dj2nazty.tileblast"
+        applicationId = "com.tileblast.game"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

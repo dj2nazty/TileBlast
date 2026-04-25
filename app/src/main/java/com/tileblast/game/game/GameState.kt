@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast.game
+package com.tileblast.game.game
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast.ui.dialogs
+package com.tileblast.game.ui.dialogs
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing

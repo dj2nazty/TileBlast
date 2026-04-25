@@ -1,4 +1,4 @@
-package com.dj2nazty.tileblast.ui
+package com.tileblast.game.ui
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -25,10 +25,10 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.dj2nazty.tileblast.game.GameConstants
-import com.dj2nazty.tileblast.game.GameState
-import com.dj2nazty.tileblast.ui.theme.BorderC
-import com.dj2nazty.tileblast.ui.theme.Red
+import com.tileblast.game.game.GameConstants
+import com.tileblast.game.game.GameState
+import com.tileblast.game.ui.theme.BorderC
+import com.tileblast.game.ui.theme.Red
 import kotlinx.coroutines.delay
 
 private data class BurstInstance(
